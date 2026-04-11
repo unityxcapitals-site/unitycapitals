@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>UnityCapitals – Trade Smarter. Grow Together.</title>
+<meta name="description" content="UnityCapitals – Elite Forex & Crypto trading community. Daily signals, analysis, and networking with professional traders."/>
+<meta property="og:title" content="UnityCapitals – Trade Smarter. Grow Together."/>
+<meta property="og:description" content="Join an elite community of disciplined traders. Forex & Crypto signals, education, and professional networking."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #04040f;
+  --bg2: #060612;
+  --surface: rgba(255,255,255,0.03);
+  --surface2: rgba(255,255,255,0.055);
+  --border: rgba(255,255,255,0.07);
+  --border-active: rgba(79,110,255,0.28);
+  --accent: #4f6eff;
+  --accent2: #7c3aff;
+  --neon: #00cfff;
+  --gold: #f7c948;
+  --green: #00e599;
+  --red: #ff4d6d;
+  --text: #eeeeff;
+  --muted: rgba(180,185,230,0.55);
+  --radius: 18px;
+  --radius-sm: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;overflow-x:hidden;-webkit-tap-highlight-color:transparent}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Outfit',sans-serif;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--accent);color:#fff}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--accent);border-radius:2px}
+
+/* ── SCROLL PROGRESS ── */
+#progress{
+  position:fixed;top:0;left:0;height:2px;width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--neon));
+  z-index:9999;transition:width 0.08s linear;
+}
+
+/* ── LOADER ── */
+#loader{
+  position:fixed;inset:0;background:var(--bg);z-index:10000;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:opacity 0.9s ease,visibility 0.9s ease;
+}
+#loader.gone{opacity:0;visibility:hidden;pointer-events:none}
+.loader-wordmark{
+  font-family:'Bebas Neue',sans-serif;font-size:3.5rem;letter-spacing:6px;
+  background:linear-gradient(135deg,var(--accent),var(--neon));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:2.5rem;
+}
+.loader-track{width:180px;height:1.5px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden}
+.loader-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--neon));animation:lf 2.2s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes lf{0%{width:0%}60%{width:65%}100%{width:100%}}
+.loader-hint{margin-top:1.2rem;font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:.8}50%{opacity:.25}}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:900;
+  padding:1rem 5%;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:background 0.4s,backdrop-filter 0.4s,border-color 0.4s;
+  border-bottom:1px solid transparent;
+}
+nav.scrolled{
+  background:rgba(4,4,15,0.88);
+  backdrop-filter:blur(28px) saturate(1.6);
+  -webkit-backdrop-filter:blur(28px) saturate(1.6);
+  border-color:var(--border);
+}
+.nav-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:1.7rem;letter-spacing:3px;
+  background:linear-gradient(135deg,var(--accent),var(--neon));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-decoration:none;
+}
+.nav-center{display:flex;gap:2.2rem;list-style:none}
+.nav-center a{
+  color:var(--muted);font-size:.85rem;text-decoration:none;
+  font-weight:500;letter-spacing:.04em;
+  transition:color 0.25s;
+}
+.nav-center a:hover{color:var(--text)}
+.nav-right{display:flex;align-items:center;gap:.8rem}
+.nav-btn{
+  display:inline-flex;align-items:center;gap:.45rem;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border:none;padding:.52rem 1.3rem;border-radius:40px;
+  font-family:'Outfit',sans-serif;font-weight:600;font-size:.82rem;
+  cursor:pointer;text-decoration:none;letter-spacing:.03em;
+  box-shadow:0 0 22px rgba(79,110,255,0.28);
+  transition:box-shadow 0.3s,transform 0.2s;
+}
+.nav-btn:hover{box-shadow:0 0 40px rgba(79,110,255,0.55);transform:translateY(-1px)}
+
+/* ── HAMBURGER ── */
+.hamburger{
+  display:none;flex-direction:column;gap:5px;cursor:pointer;
+  padding:8px;border-radius:8px;background:var(--surface);border:1px solid var(--border);
+  -webkit-tap-highlight-color:transparent;
+}
+.hamburger span{display:block;width:20px;height:1.5px;background:var(--text);border-radius:2px;transition:all 0.35s}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* ── MOBILE DRAWER ── */
+.mobile-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(300px,85vw);
+  background:rgba(4,4,15,0.97);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);
+  z-index:850;border-left:1px solid var(--border);
+  transform:translateX(100%);transition:transform 0.42s cubic-bezier(.4,0,.2,1);
+  padding:5rem 2rem 3rem;display:flex;flex-direction:column;gap:0;
+}
+.mobile-drawer.open{transform:translateX(0)}
+.mobile-drawer a{
+  color:var(--text);text-decoration:none;font-size:1.15rem;font-weight:500;
+  display:block;padding:.9rem 0;
+  border-bottom:1px solid var(--border);
+  transition:color 0.2s,padding-left 0.2s;
+}
+.mobile-drawer a:hover{color:var(--accent);padding-left:.5rem}
+.mobile-drawer .drawer-cta{
+  margin-top:2rem;padding:.85rem;border-radius:12px;text-align:center;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;font-weight:600;font-size:1rem;letter-spacing:.03em;
+  border:none;box-shadow:0 0 24px rgba(79,110,255,0.3);
+}
+.overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:840;
+  opacity:0;visibility:hidden;transition:opacity 0.4s,visibility 0.4s;
+  backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+}
+.overlay.open{opacity:1;visibility:visible}
+
+/* ── HERO ── */
+#hero{
+  position:relative;min-height:100svh;
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;padding:0 5%;
+}
+.hero-noise{
+  position:absolute;inset:0;z-index:0;opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+.hero-grid{
+  position:absolute;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(79,110,255,0.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(79,110,255,0.045) 1px,transparent 1px);
+  background-size:70px 70px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);
+  -webkit-mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black,transparent);
+}
+.hero-glow-1{
+  position:absolute;width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(79,110,255,0.1),transparent 70%);
+  top:-200px;left:-100px;pointer-events:none;
+}
+.hero-glow-2{
+  position:absolute;width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(124,58,255,0.09),transparent 70%);
+  bottom:-150px;right:-100px;pointer-events:none;
+}
+.hero-content{
+  position:relative;z-index:2;text-align:center;max-width:860px;
+  opacity:0;transform:translateY(28px);
+  animation:heroIn 1s cubic-bezier(.4,0,.2,1) 2.5s forwards;
+}
+@keyframes heroIn{to{opacity:1;transform:translateY(0)}}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(79,110,255,0.1);border:1px solid rgba(79,110,255,0.22);
+  padding:.38rem 1rem;border-radius:40px;margin-bottom:2rem;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
+}
+.live-pulse{
+  width:7px;height:7px;background:var(--green);border-radius:50%;
+  animation:lpulse 2s infinite;
+}
+@keyframes lpulse{0%,100%{box-shadow:0 0 0 0 rgba(0,229,153,0.5)}60%{box-shadow:0 0 0 7px rgba(0,229,153,0)}}
+h1{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(4rem,13vw,10rem);
+  line-height:.9;letter-spacing:4px;margin-bottom:1.5rem;
+}
+.h1-white{display:block;color:#fff}
+.h1-grad{
+  display:block;
+  background:linear-gradient(120deg,var(--accent) 0%,var(--neon) 50%,var(--accent2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-size:200% auto;animation:gradshift 5s linear infinite;
+}
+@keyframes gradshift{0%{background-position:0% center}100%{background-position:200% center}}
+.hero-sub{
+  font-size:clamp(.95rem,2vw,1.15rem);color:var(--muted);
+  max-width:500px;margin:0 auto 2.5rem;line-height:1.75;font-weight:300;
+}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;padding:.82rem 2rem;border-radius:50px;text-decoration:none;
+  font-weight:600;font-size:.9rem;letter-spacing:.04em;
+  box-shadow:0 0 40px rgba(79,110,255,0.35);
+  transition:box-shadow 0.3s,transform 0.2s;position:relative;overflow:hidden;
+}
+.btn-primary::after{
+  content:'';position:absolute;inset:0;opacity:0;
+  background:linear-gradient(135deg,var(--neon),var(--accent));
+  transition:opacity 0.3s;
+}
+.btn-primary:hover::after{opacity:1}
+.btn-primary:hover{box-shadow:0 0 60px rgba(79,110,255,0.6);transform:translateY(-2px)}
+.btn-primary > *{position:relative;z-index:1}
+.btn-ghost{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);
+  color:var(--text);padding:.82rem 2rem;border-radius:50px;text-decoration:none;
+  font-weight:500;font-size:.9rem;letter-spacing:.04em;
+  transition:background 0.3s,border-color 0.3s,transform 0.2s;
+}
+.btn-ghost:hover{background:rgba(79,110,255,0.1);border-color:rgba(79,110,255,0.4);transform:translateY(-2px)}
+.hero-scroll-hint{
+  position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);
+  z-index:2;display:flex;flex-direction:column;align-items:center;gap:.5rem;
+}
+.scroll-text{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);opacity:.6}
+.scroll-bar{width:1px;height:44px;background:linear-gradient(to bottom,transparent,var(--accent));animation:sbar 2.2s infinite}
+@keyframes sbar{0%{opacity:0;transform:scaleY(0);transform-origin:top}50%{opacity:1}100%{opacity:0;transform:scaleY(1);transform-origin:top}}
+
+/* ── TICKER ── */
+.ticker-section{
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  padding:.9rem 0;overflow:hidden;position:relative;background:var(--bg2);
+}
+.ticker-section::before,.ticker-section::after{
+  content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;
+}
+.ticker-section::before{left:0;background:linear-gradient(to right,var(--bg2),transparent)}
+.ticker-section::after{right:0;background:linear-gradient(to left,var(--bg2),transparent)}
+.ticker-track{display:flex;gap:2.5rem;width:max-content;animation:ticker 30s linear infinite}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.tick-pair{font-weight:600;font-size:.82rem;color:var(--text);letter-spacing:.04em}
+.tick-up{color:var(--green);font-size:.78rem}
+.tick-dn{color:var(--red);font-size:.78rem}
+.tick-sep{color:var(--border);font-size:.9rem}
+
+/* ── SECTIONS ── */
+section{padding:7rem 5%;position:relative}
+.section-inner{max-width:1160px;margin:0 auto}
+.section-tag{
+  display:inline-block;font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--accent);margin-bottom:.9rem;font-weight:600;
+}
+.section-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.8rem,6vw,5.5rem);
+  line-height:.92;letter-spacing:3px;margin-bottom:1rem;
+}
+.section-sub{font-size:1rem;color:var(--muted);max-width:480px;line-height:1.75;font-weight:300}
+
+/* ── REVEAL ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .75s cubic-bezier(.4,0,.2,1),transform .75s cubic-bezier(.4,0,.2,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* ── ABOUT ── */
+#about{background:linear-gradient(180deg,var(--bg),var(--bg2))}
+.about-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.about-tags{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:2rem}
+.atag{
+  background:rgba(79,110,255,0.09);border:1px solid rgba(79,110,255,0.18);
+  padding:.38rem .9rem;border-radius:40px;font-size:.78rem;color:var(--accent);font-weight:500;
+  transition:background 0.25s,border-color 0.25s;
+}
+.atag:hover{background:rgba(79,110,255,0.18);border-color:rgba(79,110,255,0.36)}
+.about-card{
+  border-radius:24px;padding:2.5rem;
+  background:rgba(255,255,255,0.025);border:1px solid var(--border);
+  position:relative;overflow:hidden;
+}
+.about-card::before{
+  content:'';position:absolute;top:-60px;right:-60px;
+  width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(79,110,255,0.1),transparent 70%);
+  pointer-events:none;
+}
+.value-row{
+  display:flex;flex-direction:column;gap:1.2rem;
+}
+.value-item{
+  display:flex;align-items:flex-start;gap:1rem;padding:1.2rem;
+  background:rgba(255,255,255,0.02);border:1px solid var(--border);
+  border-radius:var(--radius-sm);transition:border-color 0.3s,transform 0.3s;
+}
+.value-item:hover{border-color:var(--border-active);transform:translateX(6px)}
+.vi-icon{
+  width:42px;height:42px;flex-shrink:0;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+  box-shadow:0 6px 18px rgba(79,110,255,0.25);
+}
+.vi-title{font-weight:600;font-size:.92rem;margin-bottom:.3rem}
+.vi-desc{font-size:.82rem;color:var(--muted);line-height:1.6}
+
+/* ── SERVICES ── */
+#services{background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(79,110,255,0.06),transparent)}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.4rem;margin-top:4rem}
+.scard{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:22px;padding:2rem 1.8rem;
+  position:relative;overflow:hidden;
+  transition:border-color 0.4s,transform 0.4s,background 0.4s;cursor:default;
+}
+.scard::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(79,110,255,0.06),rgba(124,58,255,0.04));
+  opacity:0;transition:opacity 0.4s;border-radius:22px;
+}
+.scard:hover{border-color:var(--border-active);transform:translateY(-5px);background:var(--surface2)}
+.scard:hover::before{opacity:1}
+.scard-icon{
+  width:50px;height:50px;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-size:1.35rem;margin-bottom:1.4rem;
+  box-shadow:0 8px 22px rgba(79,110,255,0.28);
+}
+.scard-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:1px;margin-bottom:.7rem}
+.scard-desc{font-size:.86rem;color:var(--muted);line-height:1.7}
+.scard-line{
+  height:2px;width:40px;background:linear-gradient(90deg,var(--accent),var(--neon));
+  border-radius:2px;margin-top:1.5rem;
+  transition:width 0.4s;
+}
+.scard:hover .scard-line{width:80px}
+
+/* ── COMMUNITY ── */
+#community{background:linear-gradient(135deg,rgba(79,110,255,0.04),rgba(124,58,255,0.04))}
+.community-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.discord-box{
+  background:rgba(88,101,242,0.07);border:1px solid rgba(88,101,242,0.18);
+  border-radius:24px;padding:2.5rem;position:relative;overflow:hidden;
+}
+.discord-box::before{
+  content:'';position:absolute;top:-80px;right:-80px;
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle,rgba(88,101,242,0.14),transparent 70%);pointer-events:none;
+}
+.discord-box-header{display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+.discord-icon-wrap{
+  width:56px;height:56px;border-radius:16px;
+  background:linear-gradient(135deg,#5865F2,#4752C4);
+  display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;
+}
+.discord-box-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px}
+.live-badge{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-size:.68rem;color:var(--green);letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:1.2rem;
+}
+.disc-desc{font-size:.88rem;color:var(--muted);line-height:1.75;margin-bottom:1.8rem}
+.check-list{list-style:none;margin-bottom:2rem;display:flex;flex-direction:column;gap:.65rem}
+.check-list li{
+  display:flex;align-items:center;gap:.75rem;font-size:.88rem;color:var(--muted);
+}
+.check-icon{
+  width:22px;height:22px;background:rgba(0,229,153,0.12);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--green);font-size:.65rem;font-weight:700;flex-shrink:0;
+}
+.community-side{display:flex;flex-direction:column;gap:1.2rem}
+.cstat{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:16px;padding:1.4rem 1.8rem;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:border-color 0.3s,transform 0.3s;
+}
+.cstat:hover{border-color:var(--border-active);transform:translateX(5px)}
+.cstat-label{font-size:.8rem;color:var(--muted);letter-spacing:.04em}
+.cstat-sub{font-size:.68rem;color:var(--muted);opacity:.7;margin-top:.2rem}
+.cstat-val{
+  font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;
+  background:linear-gradient(135deg,var(--accent),var(--neon));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+
+/* ── FOUNDERS ── */
+#founders{background:var(--bg)}
+.founders-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;max-width:780px;margin:4rem auto 0}
+.fcard{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:24px;padding:2.5rem;text-align:center;
+  position:relative;overflow:hidden;
+  transition:transform 0.4s,border-color 0.4s;
+}
+.fcard::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:120px;
+  background:linear-gradient(180deg,rgba(79,110,255,0.07),transparent);
+  opacity:0;transition:opacity 0.4s;
+}
+.fcard:hover{transform:translateY(-8px);border-color:var(--border-active)}
+.fcard:hover::before{opacity:1}
+.favatar{
+  width:96px;height:96px;border-radius:50%;margin:0 auto 1.4rem;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:#fff;letter-spacing:2px;
+  position:relative;z-index:1;
+  box-shadow:0 0 30px rgba(79,110,255,0.35);
+  border:2px solid rgba(79,110,255,0.28);
+}
+.fname{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:2px;position:relative;z-index:1}
+.frole{font-size:.72rem;color:var(--accent);letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem;position:relative;z-index:1}
+.fbio{font-size:.86rem;color:var(--muted);line-height:1.72;margin-bottom:1.5rem;position:relative;z-index:1}
+.flink{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);
+  padding:.5rem 1.3rem;border-radius:40px;text-decoration:none;
+  color:var(--text);font-size:.8rem;font-weight:500;
+  transition:background 0.3s,border-color 0.3s;position:relative;z-index:1;
+}
+.flink:hover{background:rgba(79,110,255,0.14);border-color:rgba(79,110,255,0.38)}
+
+/* ── TESTIMONIALS ── */
+#testimonials{background:var(--bg2)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.4rem;margin-top:3.5rem}
+.tcard{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;padding:1.8rem;
+  transition:border-color 0.3s,transform 0.3s;
+}
+.tcard:hover{border-color:var(--border-active);transform:translateY(-4px)}
+.tcard-stars{color:var(--gold);font-size:.95rem;margin-bottom:1rem;letter-spacing:3px}
+.tcard-quote{
+  font-size:.88rem;color:var(--muted);line-height:1.75;
+  margin-bottom:1.2rem;font-style:italic;
+}
+.tcard-author{font-size:.78rem;color:var(--accent);font-weight:600}
+
+/* ── CTA ── */
+#cta{
+  background:linear-gradient(135deg,rgba(79,110,255,0.08),rgba(124,58,255,0.08));
+  padding:7rem 5%;text-align:center;border-top:1px solid var(--border);
+}
+.cta-badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(79,110,255,0.1);border:1px solid rgba(79,110,255,0.2);
+  padding:.38rem 1rem;border-radius:40px;margin-bottom:2rem;
+  font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+}
+#cta h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,8vw,7rem);letter-spacing:4px;line-height:.9;margin-bottom:1.5rem}
+#cta p{color:var(--muted);font-size:1rem;line-height:1.75;max-width:460px;margin:0 auto 2.5rem}
+
+/* ── FOOTER ── */
+footer{
+  background:var(--bg);border-top:1px solid var(--border);
+  padding:5rem 5% 2.5rem;
+}
+.footer-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3.5rem;
+  max-width:1160px;margin:0 auto 4rem;
+}
+.fbrand-logo{
+  font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:3px;
+  background:linear-gradient(135deg,var(--accent),var(--neon));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  display:inline-block;margin-bottom:.8rem;
+}
+.fbrand-desc{color:var(--muted);font-size:.86rem;line-height:1.7;max-width:240px}
+.social-row{display:flex;gap:.7rem;margin-top:1.5rem}
+.sicon{
+  width:40px;height:40px;background:var(--surface);border:1px solid var(--border);
+  border-radius:10px;display:flex;align-items:center;justify-content:center;
+  text-decoration:none;font-size:1.1rem;
+  transition:background 0.3s,border-color 0.3s,transform 0.2s;
+}
+.sicon:hover{background:rgba(79,110,255,0.15);border-color:rgba(79,110,255,0.4);transform:translateY(-3px)}
+.fcol-title{font-family:'Bebas Neue',sans-serif;font-size:.95rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem}
+.fcol-links{list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.fcol-links a{color:var(--muted);text-decoration:none;font-size:.86rem;transition:color 0.25s,padding-left 0.25s}
+.fcol-links a:hover{color:var(--text);padding-left:.3rem}
+.footer-bottom{
+  max-width:1160px;margin:0 auto;
+  border-top:1px solid var(--border);padding-top:2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1rem;
+}
+.footer-copy{font-size:.75rem;color:var(--muted);line-height:1.6}
+.footer-disc-btn{
+  display:inline-flex;align-items:center;gap:.6rem;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;padding:.6rem 1.5rem;border-radius:40px;text-decoration:none;
+  font-size:.8rem;font-weight:600;box-shadow:0 0 20px rgba(79,110,255,0.28);
+  transition:box-shadow 0.3s,transform 0.2s;
+}
+.footer-disc-btn:hover{box-shadow:0 0 35px rgba(79,110,255,0.5);transform:translateY(-2px)}
+
+/* ─ DIVIDER ─ */
+.divider{height:1px;max-width:1160px;margin:0 auto;background:linear-gradient(to right,transparent,var(--border),transparent)}
+
+/* ─ MOBILE ─ */
+@media(max-width:1024px){
+  .about-layout,.community-layout{grid-template-columns:1fr;gap:3rem}
+  .footer-grid{grid-template-columns:1fr 1fr;gap:2.5rem}
+}
+@media(max-width:768px){
+  nav .nav-center,.nav-right .nav-btn{display:none}
+  .hamburger{display:flex}
+  section{padding:5rem 5%}
+  #hero{padding:0 6%}
+  .hero-scroll-hint{display:none}
+  h1{font-size:clamp(3.5rem,15vw,6rem)}
+  .btn-primary,.btn-ghost{padding:.75rem 1.5rem;font-size:.86rem}
+  .founders-grid{grid-template-columns:1fr}
+  .tgrid{grid-template-columns:1fr}
+  .services-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+  .footer-grid{grid-template-columns:1fr;gap:2rem}
+  .footer-bottom{flex-direction:column;text-align:center}
+  .hero-pill{font-size:.65rem}
+  .cta-badge{font-size:.65rem}
+}
+@media(max-width:380px){
+  h1{font-size:3.2rem}
+}
+/* Safe areas for notch/island phones */
+@supports(padding-top:env(safe-area-inset-top)){
+  nav{padding-top:calc(1rem + env(safe-area-inset-top))}
+  footer{padding-bottom:calc(2.5rem + env(safe-area-inset-bottom))}
+}
+</style>
+</head>
+<body>
+
+<!-- SCROLL PROGRESS -->
+<div id="progress"></div>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-wordmark">UNITYCAPITALS</div>
+  <div class="loader-track"><div class="loader-fill"></div></div>
+  <div class="loader-hint">Loading Markets</div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">UnityCapitals</a>
+  <ul class="nav-center">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#community">Community</a></li>
+    <li><a href="#founders">Team</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="https://discord.com/invite/czm3AzPR8D" target="_blank" class="nav-btn">Join Discord ↗</a>
+    <div class="hamburger" id="hamburger" onclick="toggleDrawer()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer" id="mobileDrawer">
+  <a href="#about" onclick="toggleDrawer()">About</a>
+  <a href="#services" onclick="toggleDrawer()">Services</a>
+  <a href="#community" onclick="toggleDrawer()">Community</a>
+  <a href="#founders" onclick="toggleDrawer()">Team</a>
+  <a href="#testimonials" onclick="toggleDrawer()">Reviews</a>
+  <a href="https://discord.com/invite/czm3AzPR8D" target="_blank" class="drawer-cta" onclick="toggleDrawer()">💬 Join Discord — Free</a>
+</div>
+<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+
+  <div class="hero-content">
+    <div class="hero-pill">
+      <div class="live-pulse"></div>
+      Elite Trading Community — Est. Dec 2024
+    </div>
+    <h1>
+      <span class="h1-white">Trade</span>
+      <span class="h1-white">Smarter.</span>
+      <span class="h1-grad">Grow Together.</span>
+    </h1>
+    <p class="hero-sub">Join an elite community of disciplined traders navigating Forex & Crypto markets with precision, strategy, and shared intelligence.</p>
+    <div class="hero-btns">
+      <a href="https://discord.com/invite/czm3AzPR8D" target="_blank" class="btn-primary">
+        <span>💬</span><span>Join Our Discord</span>
+      </a>
+      <a href="https://www.instagram.com/unitycapitals" target="_blank" class="btn-ghost">
+        📸 Instagram
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-scroll-hint">
+    <div class="scroll-text">Scroll</div>
+    <div class="scroll-bar"></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-section">
+  <div class="ticker-track" id="ticker">
+    <span class="tick-pair">EUR/USD</span> <span class="tick-up">▲ 1.0847</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">BTC/USD</span> <span class="tick-up">▲ 68,420</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">GBP/USD</span> <span class="tick-dn">▼ 1.2631</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">ETH/USD</span> <span class="tick-up">▲ 3,821</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">USD/JPY</span> <span class="tick-up">▲ 154.32</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">XAU/USD</span> <span class="tick-up">▲ 2,387</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">SOL/USD</span> <span class="tick-up">▲ 172.4</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">AUD/USD</span> <span class="tick-dn">▼ 0.6542</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">EUR/USD</span> <span class="tick-up">▲ 1.0847</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">BTC/USD</span> <span class="tick-up">▲ 68,420</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">GBP/USD</span> <span class="tick-dn">▼ 1.2631</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">ETH/USD</span> <span class="tick-up">▲ 3,821</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">USD/JPY</span> <span class="tick-up">▲ 154.32</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">XAU/USD</span> <span class="tick-up">▲ 2,387</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">SOL/USD</span> <span class="tick-up">▲ 172.4</span> <span class="tick-sep">·</span>
+    <span class="tick-pair">AUD/USD</span> <span class="tick-dn">▼ 0.6542</span> <span class="tick-sep">·</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="about-layout">
+      <div class="reveal">
+        <span class="section-tag">Our Story</span>
+        <h2 class="section-title">Built by Traders,<br/>For Traders.</h2>
+        <p class="section-sub" style="margin-bottom:1.5rem">Founded in December 2024, UnityCapitals was born from a simple belief: the best traders grow faster when they grow together.</p>
+        <p style="color:var(--muted);font-size:.9rem;line-height:1.8;margin-bottom:1.5rem">We're not a course. We're not a gimmick. We are a tight-knit community of serious traders committed to real results — real signals, real analysis, real growth. No paid courses. Pure value.</p>
+        <div class="about-tags">
+          <span class="atag">🌍 Forex</span>
+          <span class="atag">₿ Crypto</span>
+          <span class="atag">📊 Signals</span>
+          <span class="atag">🤝 Community</span>
+          <span class="atag">🎓 Education</span>
+          <span class="atag">💰 Growth</span>
+        </div>
+      </div>
+      <div class="about-card reveal d2">
+        <div class="value-row">
+          <div class="value-item">
+            <div class="vi-icon">🎯</div>
+            <div>
+              <div class="vi-title">Precision Over Hype</div>
+              <div class="vi-desc">Every signal and analysis is rooted in real market structure — not emotions or guesswork.</div>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="vi-icon">🤝</div>
+            <div>
+              <div class="vi-title">Community First</div>
+              <div class="vi-desc">We're a brotherhood of traders lifting each other up. Shared knowledge accelerates growth.</div>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="vi-icon">🚫</div>
+            <div>
+              <div class="vi-title">Zero Pay Walls</div>
+              <div class="vi-desc">No courses. No upsells. No nonsense. Everything we share is free to our community members.</div>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="vi-icon">📈</div>
+            <div>
+              <div class="vi-title">Long-Term Discipline</div>
+              <div class="vi-desc">We teach patience, risk management, and consistent edge — not get-rich-quick thinking.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <div style="text-align:center;max-width:560px;margin:0 auto" class="reveal">
+      <span class="section-tag">What We Offer</span>
+      <h2 class="section-title">Everything You Need<br/>to Trade Profitably.</h2>
+      <p class="section-sub" style="margin:1rem auto 0">From live signals to deep market analysis — we cover every aspect of your trading journey.</p>
+    </div>
+    <div class="services-grid">
+      <div class="scard reveal d1">
+        <div class="scard-icon">📊</div>
+        <div class="scard-title">Daily Trade Analysis</div>
+        <div class="scard-desc">In-depth market breakdowns every single day. Understand the why behind every move — from macro fundamentals to technical structure and key levels.</div>
+        <div class="scard-line"></div>
+      </div>
+      <div class="scard reveal d2">
+        <div class="scard-icon">📡</div>
+        <div class="scard-title">Forex & Crypto Signals</div>
+        <div class="scard-desc">Real-time signals with clear entry points, stop-loss and take-profit levels. Trade with confidence backed by professional, structured analysis.</div>
+        <div class="scard-line"></div>
+      </div>
+      <div class="scard reveal d3">
+        <div class="scard-icon">🤝</div>
+        <div class="scard-title">Elite Trading Community</div>
+        <div class="scard-desc">Connect with like-minded traders, share ideas, review trades together, and build lasting professional relationships inside our Discord.</div>
+        <div class="scard-line"></div>
+      </div>
+      <div class="scard reveal d4">
+        <div class="scard-icon">🎓</div>
+        <div class="scard-title">Beginner to Pro Mentorship</div>
+        <div class="scard-desc">Whether you're brand new or scaling up — our founders guide you through every stage of the journey. No paid courses. Just real knowledge.</div>
+        <div class="scard-line"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMMUNITY -->
+<section id="community">
+  <div class="section-inner">
+    <div class="community-layout">
+      <div class="reveal">
+        <span class="section-tag">Community</span>
+        <h2 class="section-title">Join the<br/>Inner Circle.</h2>
+        <p class="section-sub" style="margin:1rem 0 2.5rem">Our Discord is the heartbeat of UnityCapitals. Real discussions, real trades, real growth — with traders who genuinely care about your success.</p>
+
+        <div class="discord-box">
+          <div class="live-badge"><div class="live-pulse"></div> Community Active Now</div>
+          <div class="discord-box-header">
+            <div class="discord-icon-wrap">💬</div>
+            <div class="discord-box-title">Unity Discord</div>
+          </div>
+          <div class="disc-desc">Join a community of disciplined traders sharing signals, strategies, and support in real time — completely free.</div>
+          <ul class="check-list">
+            <li><div class="check-icon">✓</div> Free Forex & Crypto signals</li>
+            <li><div class="check-icon">✓</div> Live trade discussions & reviews</li>
+            <li><div class="check-icon">✓</div> Network with experienced professionals</li>
+            <li><div class="check-icon">✓</div> Exclusive analysis & trade setups</li>
+            <li><div class="check-icon">✓</div> Accountability & progress tracking</li>
+          </ul>
+          <a href="https://discord.com/invite/czm3AzPR8D" target="_blank" class="btn-primary" style="display:inline-flex">
+            <span>Join Discord — It's Free</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="community-side reveal d2">
+        <div class="cstat">
+          <div><div class="cstat-label">Discord Members</div><div class="cstat-sub">↑ Growing every day</div></div>
+          <div class="cstat-val">500+</div>
+        </div>
+        <div class="cstat">
+          <div><div class="cstat-label">Signals This Month</div><div class="cstat-sub">Forex & Crypto combined</div></div>
+          <div class="cstat-val">40+</div>
+        </div>
+        <div class="cstat">
+          <div><div class="cstat-label">Instagram Followers</div><div class="cstat-sub">@unitycapitals</div></div>
+          <div class="cstat-val">2.4K</div>
+        </div>
+        <div class="cstat">
+          <div><div class="cstat-label">Markets Covered</div><div class="cstat-sub">Forex pairs & top crypto</div></div>
+          <div class="cstat-val">20+</div>
+        </div>
+        <div class="cstat">
+          <div><div class="cstat-label">Cost to Join</div><div class="cstat-sub">Always free. No upsells.</div></div>
+          <div class="cstat-val" style="color:var(--green);-webkit-text-fill-color:var(--green)">FREE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDERS -->
+<section id="founders">
+  <div class="section-inner">
+    <div style="text-align:center;max-width:560px;margin:0 auto" class="reveal">
+      <span class="section-tag">The Team</span>
+      <h2 class="section-title">Meet the<br/>Founders.</h2>
+      <p class="section-sub" style="margin:1rem auto 0">Led by passionate traders who built this community from the ground up — for traders, by traders.</p>
+    </div>
+    <div class="founders-grid">
+      <div class="fcard reveal d1">
+        <div class="favatar">P</div>
+        <div class="fname">Parm</div>
+        <div class="frole">Founder & Head Analyst</div>
+        <p class="fbio">The visionary behind UnityCapitals. Parm built this community with a clear mission: create a space where disciplined traders grow together — no noise, no gimmicks, just real results.</p>
+        <a href="https://www.instagram.com/theparm69/" target="_blank" class="flink">📸 @theparm69</a>
+      </div>
+      <div class="fcard reveal d2">
+        <div class="favatar" style="background:linear-gradient(135deg,var(--neon),var(--accent))">J</div>
+        <div class="fname">Jai</div>
+        <div class="frole">Co-Founder & Strategist</div>
+        <p class="fbio">Jai brings deep market knowledge and a talent for breaking down complex setups. He's the tactical mind ensuring every signal and analysis is actionable, precise, and educational.</p>
+        <a href="https://www.instagram.com/encrypted__jai/" target="_blank" class="flink">📸 @encrypted__jai</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-inner">
+    <div style="text-align:center;max-width:560px;margin:0 auto" class="reveal">
+      <span class="section-tag">Member Feedback</span>
+      <h2 class="section-title">What Members<br/>Are Saying.</h2>
+    </div>
+    <div class="tgrid">
+      <div class="tcard reveal d1">
+        <div class="tcard-stars">★★★★★</div>
+        <div class="tcard-quote">"UnityCapitals changed how I approach the markets. The signals are clean, the analysis is deep, and the community actually supports your growth."</div>
+        <div class="tcard-author">— Discord Member</div>
+      </div>
+      <div class="tcard reveal d2">
+        <div class="tcard-stars">★★★★★</div>
+        <div class="tcard-quote">"No fluff, no paid courses, no BS. Just real traders sharing real setups. I've improved my consistency significantly since joining."</div>
+        <div class="tcard-author">— Forex Trader, UK</div>
+      </div>
+      <div class="tcard reveal d3">
+        <div class="tcard-stars">★★★★★</div>
+        <div class="tcard-quote">"Parm and Jai actually explain their reasoning, not just the signal. That's rare and incredibly valuable for learning how to read markets yourself."</div>
+        <div class="tcard-author">— Crypto Trader, Canada</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="reveal" style="max-width:700px;margin:0 auto">
+    <div class="cta-badge">🚀 Start Your Journey Today</div>
+    <h2>Ready to Trade<br/>with the Best?</h2>
+    <p>Join hundreds of disciplined traders who chose community over isolation. No paid courses. No fake numbers. Just pure growth — together.</p>
+    <a href="https://discord.com/invite/czm3AzPR8D" target="_blank" class="btn-primary" style="display:inline-flex;font-size:1rem;padding:1rem 2.5rem">
+      <span>💬 Join Discord — Free Forever</span>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="fbrand-logo">UnityCapitals</div>
+      <p class="fbrand-desc">Building the next generation of disciplined traders. Forex & Crypto trading community founded December 2024.</p>
+      <div class="social-row">
+        <a href="https://www.instagram.com/unitycapitals" target="_blank" class="sicon" aria-label="Instagram">📸</a>
+        <a href="https://discord.com/invite/czm3AzPR8D" target="_blank" class="sicon" aria-label="Discord">💬</a>
+        <a href="https://www.instagram.com/theparm69/" target="_blank" class="sicon" aria-label="Parm's Instagram">👤</a>
+        <a href="https://www.instagram.com/encrypted__jai/" target="_blank" class="sicon" aria-label="Jai's Instagram">👤</a>
+      </div>
+    </div>
+    <div>
+      <div class="fcol-title">Navigate</div>
+      <ul class="fcol-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#community">Community</a></li>
+        <li><a href="#founders">The Team</a></li>
+        <li><a href="#testimonials">Reviews</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fcol-title">Community</div>
+      <ul class="fcol-links">
+        <li><a href="https://discord.com/invite/czm3AzPR8D" target="_blank">Discord Server</a></li>
+        <li><a href="https://www.instagram.com/unitycapitals" target="_blank">Instagram</a></li>
+        <li><a href="https://www.instagram.com/theparm69/" target="_blank">Parm's IG</a></li>
+        <li><a href="https://www.instagram.com/encrypted__jai/" target="_blank">Jai's IG</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fcol-title">Markets</div>
+      <ul class="fcol-links">
+        <li><a href="#services">Forex Signals</a></li>
+        <li><a href="#services">Crypto Signals</a></li>
+        <li><a href="#services">Trade Analysis</a></li>
+        <li><a href="#services">Mentorship</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 UnityCapitals. Trading involves significant risk. Past performance is not indicative of future results. Nothing on this site constitutes financial advice.</div>
+    <a href="https://discord.com/invite/czm3AzPR8D" target="_blank" class="footer-disc-btn">💬 Join Discord</a>
+  </div>
+</footer>
+
+<script>
+/* ── LOADER ── */
+window.addEventListener('load', () => {
+  setTimeout(() => { document.getElementById('loader').classList.add('gone'); }, 2400);
+});
+
+/* ── SCROLL ── */
+const prog = document.getElementById('progress');
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  prog.style.width = pct + '%';
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+  document.querySelectorAll('.reveal').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.9) el.classList.add('visible');
+  });
+}, { passive: true });
+
+/* ── REVEAL ON LOAD ── */
+setTimeout(() => {
+  document.querySelectorAll('.reveal').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight * 0.95) el.classList.add('visible');
+  });
+}, 2500);
+
+/* ── MOBILE DRAWER ── */
+function toggleDrawer() {
+  const d = document.getElementById('mobileDrawer');
+  const o = document.getElementById('overlay');
+  const h = document.getElementById('hamburger');
+  d.classList.toggle('open');
+  o.classList.toggle('open');
+  h.classList.toggle('open');
+  document.body.style.overflow = d.classList.contains('open') ? 'hidden' : '';
+}
+
+/* ── SMOOTH SCROLL FOR INTERNAL LINKS ── */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      const navH = navbar.offsetHeight;
+      window.scrollTo({ top: target.offsetTop - navH, behavior: 'smooth' });
+    }
+  });
+});
+
+/* ── TOUCH RIPPLE EFFECT ── */
+document.querySelectorAll('.btn-primary,.btn-ghost,.nav-btn').forEach(btn => {
+  btn.addEventListener('touchstart', function(e) {
+    this.style.transform = 'scale(0.97)';
+  }, { passive: true });
+  btn.addEventListener('touchend', function() {
+    this.style.transform = '';
+  }, { passive: true });
+});
+</script>
+</body>
+</html>
